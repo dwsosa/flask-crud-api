@@ -249,3 +249,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,windows,macos
+
+##################### repo files start HERE
+config.py
