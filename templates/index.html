@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block style %}{{obj.style}}{% endblock %}
+{% block title %}{{obj.title}}{% endblock %}
+{% block logic %}{{obj.logic}}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Header
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Column
+        </div>
+        <div class="col-9">
+            <div>
+                Cars currently for Sale
+                </tr>
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">VIN</th>
+                            <th scope="col">Make</th>
+                            <th scope="col">Model</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Manufacture Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                Test
+            </div>
+        </div>
+
+    </div>
+    {% endblock %}

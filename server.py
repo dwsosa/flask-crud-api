@@ -1,6 +1,6 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, Response, make_response, jsonify, abort
+from flask import Flask, Response, make_response, jsonify, abort, redirect, url_for, render_template
 from config import *
 from db.models import create_classes
 
@@ -74,6 +74,18 @@ def specific_car(VIN):
     except:
         abort(500)
 
+# list all sales for a given employee by referencing employee ID
+@app.route("/employee/<employeeId>/order", methods=["GET"])
+def all_sales_for_specific_employee(employeeId):
+    try:
+        employee_row = db.session.query(Salesperson.empid, Salesperson.empemail, Salesperson.firstname, Salesperson.lastname, Salesperson.datehired ).filter(Salesperson.empid==employeeId).all()
+        employee_info = [{'employee id': row[0], 'employee email': row[1], 'first name': row[2], 'last name': row[3], 'date hired' : row[4]} for row in employee_row][0]
+        sales_rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).filter(Sale.empid==employeeId).all()
+        sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in sales_rows]
+        return jsonify({"sale data for employee {}".format(employee_info["employee id"]): sales})
+    except:
+        abort(500)
+
 # list details regarding a transaction by referencing employee ID and the orderID
 @app.route("/employee/<employeeId>/order/<orderId>", methods=["GET"])
 def specific_sale(employeeId, orderId):
@@ -97,6 +109,19 @@ def resource_not_found(e):
 
 ############################# HTML ROUTES ############################
 
+@app.route("/")
+def home():
+    return redirect(url_for("home_route"))
+
+@app.route("/home")
+def home_route():
+    obj={}
+    obj["title"]="Car Dealership"
+    obj["style"]="static/css/style.css"
+    obj["logic"]="static/js/logic.js"
+    return render_template("index.html", obj=obj)
+    
+
 # 404 for any html routes that dont match 
 @app.route("/", defaults={"path": ""})
 @app.route("/<string:path>") 
@@ -105,4 +130,4 @@ def hello_world(path):
     return "<p>{}<br><br>RESOURCE NOT FOUND <br>ERROR 404 <br>NO MATCHING ROUTES ON SERVER</p>".format(path), 404
 
 if __name__ =='__main__':
-    app.run(port=718)
+    app.run(port=718, debug=True)
