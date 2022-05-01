@@ -84,7 +84,7 @@ def all_sales_for_specific_employee(employeeId):
         employee_info = [{'employee id': row[0], 'employee email': row[1], 'first name': row[2], 'last name': row[3], 'date hired' : row[4]} for row in employee_row][0]
         sales_rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).filter(Sale.empid==employeeId).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in sales_rows]
-        return jsonify({"sale data for employee {}".format(employee_info["employee id"]): sales })
+        return jsonify({"rows": sales, "columns": list(sales[0].keys())})
     except:
         abort(500)
 
@@ -97,7 +97,6 @@ def specific_sale(employeeId, orderId):
         return jsonify({"sale data": sales})
     except:
         abort(500)
-
 
 # API error handler
 @app.errorhandler(404)
@@ -112,8 +111,8 @@ def resource_not_found(e):
 ############################# HTML ROUTES ############################
 
 obj={}
-obj["style"]="static/css/style.css"
-obj["logic"]="static/js/logic.js"
+obj["style"]="./static/css/style.css"
+obj["logic"]="./static/js/logic.js"
 
 @app.route("/")
 def home():
@@ -124,7 +123,6 @@ def home_route():
     return '<div>Welcome</div>'
 
 @app.route("/dashboard/cars")
-# change route name to dashboard cars
 def cars_route():
     obj["title"]="Car Data Dashboard"
     CAR_DATA_API = "http://localhost:718/car"
@@ -145,13 +143,27 @@ def sales_route():
     data = requests.get(SALE_DATA_API).json()
     return render_template("index.html", obj=obj, data=data )
 
-@app.route("/dashboard/customer")
+@app.route("/dashboard/customers")
 def customer_route():
     obj["title"]="Customer Data Dashboard"
     CUSTOMER_DATA_API = "http://localhost:718/customer"
     data = requests.get(CUSTOMER_DATA_API).json()
     return render_template("index.html", obj=obj, data=data )
-    
+
+@app.route("/summary/employee/<salespersonid>")
+def salesperson_summary_report_route(salespersonid):
+    obj["title"]=f"Employee {salespersonid} Report"
+    SALESPERSON_REPORT_API = f"http://localhost:718/employee/{salespersonid}/order"
+    data = requests.get(SALESPERSON_REPORT_API).json()
+    return render_template("index.html", obj=obj, data=data )
+
+@app.route("/saledetailed/employeee/<salespersonid>/order/<orderid>")
+def detailed_sale_report_route(salespersonid, orderid):
+    obj["title"]=f"Employee {salespersonid} Report"
+    DETAILED_SALE_REPORT_API = f"http://localhost:718//employee/{salespersonid}/order/{orderid}"
+    data = requests.get(DETAILED_SALE_REPORT_API).json()
+    return render_template("index.html", obj=obj, data=data )
+
 # 404 for any html routes that dont match 
 @app.route("/", defaults={"path": ""})
 @app.route("/<string:path>") 

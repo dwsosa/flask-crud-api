@@ -29,7 +29,3 @@ CREATE TABLE Sale (
    	custid VARCHAR(255),
     empid VARCHAR(255)
 );
-
-
--- ALTER TABLE CarSurvey ADD CONSTRAINT CarSurvey_surveyNumber_pk PRIMARY KEY (surveyNumber);
--- ALTER TABLE CarSurvey ADD CONSTRAINT CarSurvey_invoiceNo_CarSale_invoiceNumber_fk FOREIGN KEY (invoiceNo) REFERENCES CarSale (invoiceNo);
