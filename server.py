@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, Response, make_response, jsonify, abort, redirect, url_for, render_template
 from config import *
 from db.models import create_classes
+import requests
+import json
 
 app = Flask(__name__)
 
@@ -27,7 +29,7 @@ def all_cars_for_sale():
     try:
         rows = db.session.query(Car.vin, Car.make, Car.model, Car.listprice, Car.color, Car.dateofmanufacture).all()
         cars = [{'VIN': row[0], 'make': row[1], 'model': row[2], 'sticker price': row[3], 'color' : row[4], 'manufacture date' : row[5]} for row in rows]
-        response = jsonify({"vehicles on lot": cars})
+        response = jsonify({"rows": cars, "columns": list(cars[0].keys())})
         return response
     except:
         abort(500)
@@ -38,7 +40,7 @@ def all_employees():
     try:
         rows = db.session.query(Salesperson.empid, Salesperson.empemail, Salesperson.firstname, Salesperson.lastname, Salesperson.datehired ).all()
         employees = [{'employee id': row[0], 'employee email': row[1], 'first name': row[2], 'last name': row[3], 'date hired' : row[4]} for row in rows]
-        response = jsonify({"employees": employees})
+        response = jsonify({"rows": employees, "columns": list(employees[0].keys())})
         return response
     except:
         abort(500)
@@ -49,7 +51,7 @@ def all_sales():
     try:
         rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in rows]
-        return jsonify({"sales data": sales})
+        return jsonify({"rows": sales, "columns": list(sales[0].keys()) })
     except:
         abort(500)
 
@@ -59,7 +61,7 @@ def all_customers():
     try:
         rows = db.session.query(Customer.custid, Customer.custemail, Customer.firstname, Customer.lastname ).all()
         customers = [{'id': row[0], 'email':row[1], 'first name': row[2], 'last name': row[3]} for row in rows]
-        return jsonify({"customers data": customers})
+        return jsonify({"rows": customers, "columns": list(customers[0].keys())  })
     except:
         abort(500)
 
@@ -69,7 +71,7 @@ def specific_car(VIN):
     try:
         rows = db.session.query(Car.vin, Car.make, Car.model, Car.listprice, Car.color, Car.dateofmanufacture).filter(Car.vin==VIN).all()
         cars = [{'VIN': row[0], 'make': row[1], 'model': row[2], 'sticker price': row[3], 'color' : row[4], 'manufacture date' : row[5]} for row in rows]
-        response = jsonify({"vehicle data": cars})
+        response = jsonify({"rows": cars, "columns": list(cars[0].keys()) })
         return response
     except:
         abort(500)
@@ -82,7 +84,7 @@ def all_sales_for_specific_employee(employeeId):
         employee_info = [{'employee id': row[0], 'employee email': row[1], 'first name': row[2], 'last name': row[3], 'date hired' : row[4]} for row in employee_row][0]
         sales_rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).filter(Sale.empid==employeeId).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in sales_rows]
-        return jsonify({"sale data for employee {}".format(employee_info["employee id"]): sales})
+        return jsonify({"sale data for employee {}".format(employee_info["employee id"]): sales })
     except:
         abort(500)
 
@@ -109,19 +111,47 @@ def resource_not_found(e):
 
 ############################# HTML ROUTES ############################
 
+obj={}
+obj["style"]="static/css/style.css"
+obj["logic"]="static/js/logic.js"
+
 @app.route("/")
 def home():
     return redirect(url_for("home_route"))
 
 @app.route("/home")
 def home_route():
-    obj={}
-    obj["title"]="Car Dealership"
-    obj["style"]="static/css/style.css"
-    obj["logic"]="static/js/logic.js"
-    return render_template("index.html", obj=obj)
-    
+    return '<div>Welcome</div>'
 
+@app.route("/dashboard/cars")
+# change route name to dashboard cars
+def cars_route():
+    obj["title"]="Car Data Dashboard"
+    CAR_DATA_API = "http://localhost:718/car"
+    data = requests.get(CAR_DATA_API).json()
+    return render_template("index.html", obj=obj, data=data )
+
+@app.route("/dashboard/employees")
+def employees_route():
+    obj["title"]="Employee Data Dashboard"
+    EMPLOYEE_DATA_API = "http://localhost:718/employee"
+    data = requests.get(EMPLOYEE_DATA_API).json()
+    return render_template("index.html", obj=obj, data=data )
+
+@app.route("/dashboard/sales")
+def sales_route():
+    obj["title"]="Sales Data Dashboard"
+    SALE_DATA_API = "http://localhost:718/sale"
+    data = requests.get(SALE_DATA_API).json()
+    return render_template("index.html", obj=obj, data=data )
+
+@app.route("/dashboard/customer")
+def customer_route():
+    obj["title"]="Customer Data Dashboard"
+    CUSTOMER_DATA_API = "http://localhost:718/customer"
+    data = requests.get(CUSTOMER_DATA_API).json()
+    return render_template("index.html", obj=obj, data=data )
+    
 # 404 for any html routes that dont match 
 @app.route("/", defaults={"path": ""})
 @app.route("/<string:path>") 

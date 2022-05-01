@@ -5,42 +5,31 @@
 {% block logic %}{{obj.logic}}{% endblock %}
 
 {% block content %}
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            Header
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            Column
-        </div>
-        <div class="col-9">
-            <div>
-                Cars currently for Sale
-                </tr>
                 <table class="table table-dark table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">VIN</th>
-                            <th scope="col">Make</th>
-                            <th scope="col">Model</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Color</th>
-                            <th scope="col">Manufacture Date</th>
+                            {%for i in range(0, data.columns | length)%}
+                            <th scope="col">{{data.columns[i]}}</th>
+                            {%endfor%}
                         </tr>
                     </thead>
                     <tbody>
+                        {%for rowIndex in range(0, data.rows| length)%}
+                        <tr>
+                            {%for columnIndex in range(0, data.columns | length)%}
+                                <td>{{data.rows[rowIndex][data.columns[columnIndex]]}}</td>
+                            {%endfor%}
+                        </tr>
+                        {%endfor%}
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                Test
-            </div>
-        </div>
+{% endblock %}
 
-    </div>
-    {% endblock %}
+<!-- 
+    {% for row in rows %}
+    <tr>
+         {% for column in Columns %}
+             <td>{{ row[column] }}</td>
+         {% endfor %}
+    </tr>
+{% endfor %} -->
