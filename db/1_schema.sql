@@ -1,4 +1,8 @@
- CREATE TABLE Customer (
+SELECT session_user, current_database();
+
+-- GRANT ALL PRIVILEGES ON DATABASE dealership TO postgres;
+
+CREATE TABLE Customer (
  	custid VARCHAR(255),
  	custemail VARCHAR(255),
  	firstname VARCHAR(255),

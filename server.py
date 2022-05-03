@@ -31,8 +31,10 @@ def all_cars_for_sale():
         cars = [{'VIN': row[0], 'make': row[1], 'model': row[2], 'sticker price': row[3], 'color' : row[4], 'manufacture date' : row[5]} for row in rows]
         response = jsonify({"rows": cars, "columns": list(cars[0].keys())})
         return response
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
+        # abort(500)
 
 # list all employees
 @app.route("/employee", methods=["GET"])
@@ -124,9 +126,14 @@ def home_route():
 
 @app.route("/dashboard/cars")
 def cars_route():
+    print(LOCAL_DB)
     obj["title"]="Car Data Dashboard"
-    CAR_DATA_API = "http://localhost:718/car"
-    data = requests.get(CAR_DATA_API).json()
+    try:
+        CAR_DATA_API = "http://localhost:718/car"
+        data = requests.get(CAR_DATA_API).json()
+    except Exception as e:
+        print(e)
+        data=e
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/dashboard/employees")
@@ -150,6 +157,13 @@ def customer_route():
     data = requests.get(CUSTOMER_DATA_API).json()
     return render_template("index.html", obj=obj, data=data )
 
+@app.route("/carinfo/<vin>")
+def car_info_route(vin):
+    obj["title"]=f"Car Info"
+    CAR_INFO_API = f"http://localhost:718/car/{vin}"
+    data = requests.get(CAR_INFO_API).json()
+    return render_template("index.html", obj=obj, data=data )
+
 @app.route("/summary/employee/<salespersonid>")
 def salesperson_summary_report_route(salespersonid):
     obj["title"]=f"Employee {salespersonid} Report"
@@ -160,7 +174,7 @@ def salesperson_summary_report_route(salespersonid):
 @app.route("/saledetailed/employeee/<salespersonid>/order/<orderid>")
 def detailed_sale_report_route(salespersonid, orderid):
     obj["title"]=f"Employee {salespersonid} Report"
-    DETAILED_SALE_REPORT_API = f"http://localhost:718//employee/{salespersonid}/order/{orderid}"
+    DETAILED_SALE_REPORT_API = f"http://localhost:718/employee/{salespersonid}/order/{orderid}"
     data = requests.get(DETAILED_SALE_REPORT_API).json()
     return render_template("index.html", obj=obj, data=data )
 
@@ -172,4 +186,4 @@ def hello_world(path):
     return "<p>{}<br><br>RESOURCE NOT FOUND <br>ERROR 404 <br>NO MATCHING ROUTES ON SERVER</p>".format(path), 404
 
 if __name__ =='__main__':
-    app.run(port=718, debug=True)
+    app.run(port=718)
