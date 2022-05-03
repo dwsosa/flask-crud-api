@@ -113,9 +113,9 @@ def resource_not_found(e):
 ############################# HTML ROUTES ############################
 
 obj={}
-obj["style"]="./static/css/style.css"
-obj["logic"]="./static/js/logic.js"
-
+obj["style"]="/static/css/style.css"
+obj["logic"]="/static/js/logic.js"
+obj["image"] = "http://localhost:718/static/images/hummer.jpg"
 @app.route("/")
 def home():
     return redirect(url_for("home_route"))
@@ -126,7 +126,6 @@ def home_route():
 
 @app.route("/dashboard/cars")
 def cars_route():
-    print(LOCAL_DB)
     obj["title"]="Car Data Dashboard"
     try:
         CAR_DATA_API = "http://localhost:718/car"
@@ -186,4 +185,4 @@ def hello_world(path):
     return "<p>{}<br><br>RESOURCE NOT FOUND <br>ERROR 404 <br>NO MATCHING ROUTES ON SERVER</p>".format(path), 404
 
 if __name__ =='__main__':
-    app.run(port=718)
+    app.run(port=718,debug=True)

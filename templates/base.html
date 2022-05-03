@@ -23,20 +23,79 @@
 </head>
 
 <body>
-    <div class ='container'>
+    <div class='container'>
         <div class="row">
-            <div class="col">Header</div>
-          </div>
-      <div class="row">
-        <div class="col-3">col-3</div>
-        <div class="col-9"> {% block content %}{% endblock %}</div>
-      </div>
-      <div class="row">
-        <div class="col">Footer</div>
-      </div>
+            <div class="col welcome">Welcome To My Dealership Dashboard</div>
 
-</div>
+            <figure class="figure">
+                <img src="http://localhost:718/static/images/hummer.jpg" class="figure-img img-fluid rounded mainImage"
+                    alt="hummer">
+                <div>
+                    <figcaption class="figure-caption text-start"> GM Hummer EV pictured</figcaption>
+                </div>
+            </figure>
+
+
+        </div>
+        <div class="row">
+            <div class="col"> {% block content %}{% endblock %}</div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="allButtons">
+                    <button type="button" class="btn btn-success carButton">Cars</button>
+                    <button type="button" class="btn btn-primary saleButton">Sales</button>
+                    <button type="button" class="btn btn-secondary employeeButton">Employees</button>
+                    <button type="button" class="btn btn-danger customerButton">Customers</button>
+                    <div class="input-group employeeFieldGroup">
+                        <span class="input-group-text">Employee Id</span>
+                        <textarea class="form-control employeeIdInput" aria-label="With textarea"></textarea>
+                    </div>
+                    <div> <button type="button" class="btn btn-info employeeReportButton">Employee Report</button></div>
+
+                    <div class="input-group vinFieldGroup">
+                        <span class="input-group-text">VIN Number</span>
+                        <textarea class="form-control vinInput" aria-label="With textarea"></textarea>
+                    </div>
+                    <div><button type="button" class="btn btn-warning vehicleSearchButton">Vehicle Search</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col copyright">Copyright David Sosa 2022</div>
+    </div>
+
+    </div>
     <script src={% block logic %}{% endblock %}></script>
+    <script>
+
+        function carButton() {
+            console.log("car");
+        }
+        function saleButton() {
+            console.log("sale");
+        }
+        function employeeButton() {
+            console.log("employee");
+        }
+        function customerButton() {
+            console.log("customer");
+        }
+        function vehicleSearchButton() {
+            console.log("search vin");
+        }
+        function employeeReportButton() {
+            console.log("emp");
+        }
+
+        document.getElementsByClassName("carButton")[0].addEventListener("click", carButton)
+        document.getElementsByClassName("saleButton")[0].addEventListener("click", saleButton)
+        document.getElementsByClassName("employeeButton")[0].addEventListener("click", employeeButton)
+        document.getElementsByClassName("customerButton")[0].addEventListener("click", customerButton)
+        document.getElementsByClassName("vehicleSearchButton")[0].addEventListener("click", vehicleSearchButton)
+        document.getElementsByClassName("employeeReportButton")[0].addEventListener("click", employeeReportButton)
+    </script>
 </body>
 
 </html>
