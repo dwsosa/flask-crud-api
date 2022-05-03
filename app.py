@@ -9,7 +9,7 @@ import json
 app = Flask(__name__)
 
 ############################# DATABASE SETUP ############################
-LOCAL_DB = f"{DIALECT}://{USERNAME}:{PASSWORD}@localhost:{PORT}/{DATABASE_NAME}"
+LOCAL_DB = f"{DIALECT}://{USERNAME}:{PASSWORD}@{SERVICE_NAME}:{PORT}/{DATABASE_NAME}"
 
 # default to local db if no DB environmental variable provided i.e., not a production environment
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or LOCAL_DB
@@ -30,6 +30,7 @@ def all_cars_for_sale():
         rows = db.session.query(Car.vin, Car.make, Car.model, Car.listprice, Car.color, Car.dateofmanufacture).all()
         cars = [{'VIN': row[0], 'make': row[1], 'model': row[2], 'sticker price': row[3], 'color' : row[4], 'manufacture date' : row[5]} for row in rows]
         response = jsonify({"rows": cars, "columns": list(cars[0].keys())})
+        print(respose)
         return response
     except Exception as e:
         print(e)
@@ -104,7 +105,8 @@ def specific_sale(employeeId, orderId):
 @app.errorhandler(404)
 def resource_not_found(e):
     try:
-        response = make_response(jsonify({"message" : "no match on API server for the data requested"}), 404)
+        object_to_be_encoded = {"message" : "no match on API server for the data requested"}
+        response = make_response(jsonify(object_to_be_encoded), 404)
         response.headers["Content-Type"] = "application/json"
         return response
     except:
@@ -186,4 +188,4 @@ def hello_world(path):
     return "<p>{}<br><br>RESOURCE NOT FOUND <br>ERROR 404 <br>NO MATCHING ROUTES ON SERVER</p>".format(path), 404
 
 if __name__ =='__main__':
-    app.run(port=718)
+    app.run(host="0.0.0.0", port=718, debug=True)

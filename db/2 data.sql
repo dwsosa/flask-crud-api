@@ -1,5 +1,5 @@
 -- Customer table data
-
+SELECT session_user, current_database();
 INSERT INTO Customer (custId, custEmail, firstName, lastName)
  VALUES ('c001','dp@cowboys.com', 'Dakota', 'Prescott');
 

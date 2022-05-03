@@ -1,6 +1,9 @@
+-- CREATE DATABASE dealership;
+-- \connect dealership
+
 SELECT session_user, current_database();
 
--- GRANT ALL PRIVILEGES ON DATABASE dealership TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE dealership TO postgres;
 
 CREATE TABLE Customer (
  	custid VARCHAR(255),

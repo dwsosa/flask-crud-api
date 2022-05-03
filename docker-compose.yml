@@ -1,13 +1,18 @@
 version: "1.0"
 services:
-  backenddb:
+  backend-db:
     image: postgres:alpine
     restart: always
     ports:  
         - 80:5432
     environment:
-        - POSTGRES_USER =postgres
+        - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_DB=dealership
+        - PGDATA=/var/lib/postgresql/data/
     volumes:
-      - ./:/docker-entrypoint-initdb.d/
+      - ./db:/docker-entrypoint-initdb.d/
+  frontend:
+    build: ./
+    ports:
+      - "718:5000"
