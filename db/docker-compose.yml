@@ -1,11 +1,12 @@
-version: "3.8"
+version: "1.0"
 services:
   backenddb:
-    image: 	postgres:alpine
+    image: postgres:alpine
     restart: always
     ports:  
         - 80:5432
     environment:
+        - POSTGRES_USER =postgres
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_DB=dealership
     volumes:

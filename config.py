@@ -1,5 +1,5 @@
-USERNAME="NICE"
-PASSWORD="TRY"
-DATABASE_NAME = ""
-PORT = ""
-DIALECT="" #postgres, mysql, sqlite, etc.
+USERNAME="postgres"
+PASSWORD="postgres"
+DATABASE_NAME = "dealership"
+PORT = "80"
+DIALECT="postgresql"
