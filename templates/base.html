@@ -70,23 +70,41 @@
     <script src={% block logic %}{% endblock %}></script>
     <script>
 
-        function carButton() {
+        function carButton(event) {
+            event.preventDefault();
             console.log("car");
+            document.location.href="http://localhost:718/dashboard/cars"
         }
         function saleButton() {
+            event.preventDefault();
+
             console.log("sale");
+            document.location.href="http://localhost:718/dashboard/sales"
         }
         function employeeButton() {
+            event.preventDefault();
+
             console.log("employee");
+            document.location.href="http://localhost:718/dashboard/employees"
         }
         function customerButton() {
+            event.preventDefault();
+
             console.log("customer");
+            document.location.href="http://localhost:718/dashboard/customers"
         }
         function vehicleSearchButton() {
+            event.preventDefault();
+
             console.log("search vin");
+            console.log(document.getElementsByClassName("vinInput")[0])
+            
         }
         function employeeReportButton() {
+            event.preventDefault();
+
             console.log("emp");
+            // document.getElementsByClassName("")[0].value
         }
 
         document.getElementsByClassName("carButton")[0].addEventListener("click", carButton)
