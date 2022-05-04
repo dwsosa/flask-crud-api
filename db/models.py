@@ -1,20 +1,24 @@
 def create_classes(db):
     class Customer(db.Model):
         __tablename__ = 'customer'
-        custid = db.Column(db.String(255), primary_key=True)
+        custid = db.Column(db.String(255), db.ForeignKey('sale.custid'), primary_key=True)
         custemail = db.Column(db.String(255))
         firstname = db.Column(db.String(255))
         lastname = db.Column(db.String(255))
+        # one to many
+        FK_children = db.relationship("Sale")
+
         def __repr__(self):
             return '<customer %r>' % (self.name)
 
     class Salesperson(db.Model):
         __tablename__ = 'salesperson'
-        empid = db.Column(db.String(255), primary_key=True)
+        empid = db.Column(db.String(255), db.ForeignKey('sale.empid'), primary_key=True)
         empemail = db.Column(db.String(255))
         firstname = db.Column(db.String(255))
         lastname = db.Column(db.String(255))
         datehired= db.Column(db.Date)
+        FK_children = db.relationship("Sale")
         def __repr__(self):
             return '<salesperson %r>' % (self.name)
     
@@ -28,7 +32,6 @@ def create_classes(db):
         dateofmanufacture = db.Column(db.Date)
         def __repr__(self):
             return '<car %r>' % (self.name)
-
                 
     class Sale(db.Model):
         __tablename__ = 'sale'

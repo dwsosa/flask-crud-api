@@ -1,6 +1,6 @@
 SELECT session_user, current_database();
 
--- GRANT ALL PRIVILEGES ON DATABASE dealership TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE dealership TO postgres;
 
 CREATE TABLE Customer (
  	custid VARCHAR(255),
@@ -33,3 +33,11 @@ CREATE TABLE Sale (
    	custid VARCHAR(255),
     empid VARCHAR(255)
 );
+
+ALTER TABLE Customer ADD CONSTRAINT PK_Customer PRIMARY KEY (custid);
+ALTER TABLE Salesperson ADD CONSTRAINT PK_Salesperson PRIMARY KEY (empid);
+ALTER TABLE Car ADD CONSTRAINT PK_Car PRIMARY KEY (vin);
+ALTER TABLE Sale ADD CONSTRAINT PK_Sale PRIMARY KEY (invoiceno);
+
+ALTER TABLE Sale ADD CONSTRAINT FK_Sale_empid_Salesperson_empid  FOREIGN KEY (empid) REFERENCES Salesperson(empid);
+ALTER TABLE Sale ADD CONSTRAINT FK_Sale_custid_Salesperson_custid FOREIGN KEY (custid) REFERENCES Customer(custid);
