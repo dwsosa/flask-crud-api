@@ -87,36 +87,32 @@
         function carButton(event) {
             event.preventDefault();
             console.log("car");
-            document.location.href="http://localhost:718/dashboard/cars"
+            document.location.href= baseUrl + "dashboard/cars"
         }
         function saleButton() {
             event.preventDefault();
 
             console.log("sale");
-            document.location.href="http://localhost:718/dashboard/sales"
+            document.location.href= baseUrl+ "dashboard/sales"
         }
         function employeeButton() {
             event.preventDefault();
-
-            console.log("employee");
-            document.location.href="http://localhost:718/dashboard/employees"
+            document.location.href= baseUrl+ "dashboard/employees"
         }
         function customerButton() {
             event.preventDefault();
-
-            console.log("customer");
-            document.location.href="http://localhost:718/dashboard/customers"
+            document.location.href= baseUrl + "dashboard/customers";
         }
         function vehicleSearchButton() {
             event.preventDefault();
             var vinInput = document.getElementsByClassName("vinInput")[0].value;
-            document.location.href= baseUrl + `/car/${vinInput}`;
+            document.location.href= baseUrl + `carinfo/${vinInput}`;
         }
 
         function employeeReportButton() {
             event.preventDefault();
             var employeeId = document.getElementsByClassName("employeeIdInput")[0].value;
-            var url = baseUrl+`employee/${employeeId}/order`
+            var url = baseUrl+`summary/employee/${employeeId}`
             document.location.href=url;
         }
 
@@ -124,7 +120,11 @@
             event.preventDefault();
             var employeeId = document.getElementsByClassName("detailedSaleEmployeeId")[0].value;
             var orderId = document.getElementsByClassName("detailedSaleOrderId")[0].value;
-            var url = baseUrl+`/saledetailed/employeee/${employeeId}/order/${orderId}`;
+            // /saledetailed/employee/<salespersonid>/order/<orderid>
+            var url = baseUrl+`saledetailed/employeee/${employeeId}/order/${orderId}`;
+            console.log(employeeId)
+            console.log(orderId)
+            console.log(url)
             document.location.href=url;
         }
 

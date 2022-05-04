@@ -180,7 +180,7 @@ def salesperson_summary_report_route(salespersonid):
     data = requests.get(SALESPERSON_REPORT_API).json()
     return render_template("index.html", obj=obj, data=data )
 
-@app.route("/saledetailed/employeee/<salespersonid>/order/<orderid>")
+@app.route("/saledetailed/employee/<salespersonid>/order/<orderid>")
 def detailed_sale_report_route(salespersonid, orderid):
     obj["title"]=f"Employee {salespersonid} Report"
     DETAILED_SALE_REPORT_API = f"http://localhost:718/employee/{salespersonid}/order/{orderid}"
