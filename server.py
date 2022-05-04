@@ -34,7 +34,6 @@ def all_cars_for_sale():
     except Exception as e:
         print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
-        # abort(500)
 
 # list all employees
 @app.route("/employee", methods=["GET"])
@@ -44,8 +43,10 @@ def all_employees():
         employees = [{'employee id': row[0], 'employee email': row[1], 'first name': row[2], 'last name': row[3], 'date hired' : row[4]} for row in rows]
         response = jsonify({"rows": employees, "columns": list(employees[0].keys())})
         return response
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
+
 
 # list all sales
 @app.route("/sale", methods=["GET"])
@@ -54,8 +55,10 @@ def all_sales():
         rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in rows]
         return jsonify({"rows": sales, "columns": list(sales[0].keys()) })
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
+
 
 # list all customers
 @app.route("/customer", methods=["GET"])
@@ -64,8 +67,10 @@ def all_customers():
         rows = db.session.query(Customer.custid, Customer.custemail, Customer.firstname, Customer.lastname ).all()
         customers = [{'id': row[0], 'email':row[1], 'first name': row[2], 'last name': row[3]} for row in rows]
         return jsonify({"rows": customers, "columns": list(customers[0].keys())  })
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
+
 
 # list details for specific car using VIN for reference
 @app.route("/car/<VIN>", methods=["GET"])
@@ -75,8 +80,10 @@ def specific_car(VIN):
         cars = [{'VIN': row[0], 'make': row[1], 'model': row[2], 'sticker price': row[3], 'color' : row[4], 'manufacture date' : row[5]} for row in rows]
         response = jsonify({"rows": cars, "columns": list(cars[0].keys()) })
         return response
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
+
 
 # list all sales for a given employee by referencing employee ID
 @app.route("/employee/<employeeId>/order", methods=["GET"])
@@ -87,8 +94,10 @@ def all_sales_for_specific_employee(employeeId):
         sales_rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).filter(Sale.empid==employeeId).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in sales_rows]
         return jsonify({"rows": sales, "columns": list(sales[0].keys())})
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
+
 
 # list details regarding a transaction by referencing employee ID and the orderID
 @app.route("/employee/<employeeId>/order/<orderId>", methods=["GET"])
@@ -97,8 +106,9 @@ def specific_sale(employeeId, orderId):
         rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).filter(Sale.empid==employeeId).filter(Sale.invoiceno==orderId).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in rows]
         return jsonify({"sale data": sales})
-    except:
-        abort(500)
+    except Exception as e:
+        print(e)
+        raise Exception('Invalid json: {}'.format(e)) from None
 
 # API error handler
 @app.errorhandler(404)
