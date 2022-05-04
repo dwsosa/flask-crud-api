@@ -65,7 +65,7 @@ def all_sales():
 def all_customers():
     try:
         rows = db.session.query(Customer.custid, Customer.custemail, Customer.firstname, Customer.lastname ).all()
-        customers = [{'id': row[0], 'email':row[1], 'first name': row[2], 'last name': row[3]} for row in rows]
+        customers = [{'customer id': row[0], 'email':row[1], 'first name': row[2], 'last name': row[3]} for row in rows]
         return jsonify({"rows": customers, "columns": list(customers[0].keys())  })
     except Exception as e:
         print(e)
