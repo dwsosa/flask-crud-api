@@ -105,7 +105,7 @@ def specific_sale(employeeId, orderId):
     try:
         rows = db.session.query(Sale.invoiceno, Sale.saledate, Sale.saleprice, Sale.custid, Sale.empid ).filter(Sale.empid==employeeId).filter(Sale.invoiceno==orderId).all()
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in rows]
-        return jsonify({"sale data": sales})
+        return jsonify({"rows": sales, "columns":  list(sales[0].keys())})
     except Exception as e:
         print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
@@ -182,6 +182,8 @@ def salesperson_summary_report_route(salespersonid):
 
 @app.route("/saledetailed/employee/<salespersonid>/order/<orderid>")
 def detailed_sale_report_route(salespersonid, orderid):
+    print("order: ", orderid)
+    print("salesperson: ", salespersonid)
     obj["title"]=f"Employee {salespersonid} Report"
     DETAILED_SALE_REPORT_API = f"http://localhost:718/employee/{salespersonid}/order/{orderid}"
     data = requests.get(DETAILED_SALE_REPORT_API).json()

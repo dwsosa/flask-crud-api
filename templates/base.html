@@ -120,11 +120,10 @@
             event.preventDefault();
             var employeeId = document.getElementsByClassName("detailedSaleEmployeeId")[0].value;
             var orderId = document.getElementsByClassName("detailedSaleOrderId")[0].value;
-            // /saledetailed/employee/<salespersonid>/order/<orderid>
-            var url = baseUrl+`saledetailed/employeee/${employeeId}/order/${orderId}`;
-            console.log(employeeId)
-            console.log(orderId)
-            console.log(url)
+            var url = baseUrl+`saledetailed/employee/${employeeId}/order/${orderId}`;
+            console.log(employeeId);
+            console.log(orderId);
+            console.log(url);
             document.location.href=url;
         }
 
