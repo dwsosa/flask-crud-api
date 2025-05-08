@@ -1,7 +1,6 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, Response, make_response, jsonify, abort, redirect, url_for, render_template
-from config import *
 from db.models import create_classes
 import requests
 import json
@@ -9,10 +8,9 @@ import json
 app = Flask(__name__)
 
 ############################# DATABASE SETUP ############################
-LOCAL_DB = f"{DIALECT}://{USERNAME}:{PASSWORD}@localhost:{PORT}/{DATABASE_NAME}"
-
-# default to local db if no DB environmental variable provided i.e., not a production environment
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or LOCAL_DB
+# Use environment variable if available, otherwise fallback to localhost
+# This is a good practice for deploying applications to production, as it allows you to easily change the database connection string without modifying the code.
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://localhost/your_db') # Use DATABASE_URL directly from the environment
 
 # SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -197,4 +195,4 @@ def hello_world(path):
     return "<p>{}<br><br>RESOURCE NOT FOUND <br>ERROR 404 <br>NO MATCHING ROUTES ON SERVER</p>".format(path), 404
 
 if __name__ =='__main__':
-    app.run(port=718,debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

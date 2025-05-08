@@ -1,8 +1,6 @@
 # start by pulling the python image
 FROM python:3.10-alpine
 
-ENV FLASK_APP=server.py
-
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # copy the requirements file into the image
@@ -19,7 +17,4 @@ COPY . /app
 
 EXPOSE 718
 
-# configure the container to run in an executed manner
-ENTRYPOINT [ "python" ]
-
-CMD ["flask", "run" ]
+CMD ["python", "server.py"]
