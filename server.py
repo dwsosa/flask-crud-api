@@ -15,6 +15,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres
 # SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:5000")
+
+
 db = SQLAlchemy(app)
 
 Customer, Salesperson, Car, Sale = create_classes(db)
@@ -30,7 +33,6 @@ def all_cars_for_sale():
         response = jsonify({"rows": cars, "columns": list(cars[0].keys())})
         return response
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 # list all employees
@@ -42,7 +44,6 @@ def all_employees():
         response = jsonify({"rows": employees, "columns": list(employees[0].keys())})
         return response
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 
@@ -54,7 +55,6 @@ def all_sales():
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in rows]
         return jsonify({"rows": sales, "columns": list(sales[0].keys()) })
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 
@@ -66,7 +66,6 @@ def all_customers():
         customers = [{'customer id': row[0], 'email':row[1], 'first name': row[2], 'last name': row[3]} for row in rows]
         return jsonify({"rows": customers, "columns": list(customers[0].keys())  })
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 
@@ -79,7 +78,6 @@ def specific_car(VIN):
         response = jsonify({"rows": cars, "columns": list(cars[0].keys()) })
         return response
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 
@@ -93,7 +91,6 @@ def all_sales_for_specific_employee(employeeId):
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in sales_rows]
         return jsonify({"rows": sales, "columns": list(sales[0].keys())})
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 
@@ -105,7 +102,6 @@ def specific_sale(employeeId, orderId):
         sales = [{'invoice number': row[0], 'sale date':row[1], 'sale price': row[2], 'customer id': row[3], 'employee id' : row[4]} for row in rows]
         return jsonify({"rows": sales, "columns":  list(sales[0].keys())})
     except Exception as e:
-        print(e)
         raise Exception('Invalid json: {}'.format(e)) from None
 
 # API error handler
@@ -123,7 +119,7 @@ def resource_not_found(e):
 obj={}
 obj["style"]="/static/css/style.css"
 obj["logic"]="/static/js/logic.js"
-obj["image"] = "http://localhost:718/static/images/hummer.jpg"
+obj["image"] = f"{BASE_URL}/static/images/hummer.jpg"
 @app.route("/")
 def home():
     return redirect(url_for("home_route"))
@@ -136,54 +132,51 @@ def home_route():
 def cars_route():
     obj["title"]="Car Data Dashboard"
     try:
-        CAR_DATA_API = "http://localhost:718/car"
+        CAR_DATA_API = f"{BASE_URL}/car"
         data = requests.get(CAR_DATA_API).json()
     except Exception as e:
-        print(e)
         data=e
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/dashboard/employees")
 def employees_route():
     obj["title"]="Employee Data Dashboard"
-    EMPLOYEE_DATA_API = "http://localhost:718/employee"
+    EMPLOYEE_DATA_API = f"{BASE_URL}/employee"
     data = requests.get(EMPLOYEE_DATA_API).json()
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/dashboard/sales")
 def sales_route():
     obj["title"]="Sales Data Dashboard"
-    SALE_DATA_API = "http://localhost:718/sale"
+    SALE_DATA_API = f"{BASE_URL}/sale"
     data = requests.get(SALE_DATA_API).json()
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/dashboard/customers")
 def customer_route():
     obj["title"]="Customer Data Dashboard"
-    CUSTOMER_DATA_API = "http://localhost:718/customer"
+    CUSTOMER_DATA_API = f"{BASE_URL}/customer"
     data = requests.get(CUSTOMER_DATA_API).json()
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/carinfo/<vin>")
 def car_info_route(vin):
     obj["title"]=f"Car Info"
-    CAR_INFO_API = f"http://localhost:718/car/{vin}"
+    CAR_INFO_API = f"{BASE_URL}/car/{vin}"
     data = requests.get(CAR_INFO_API).json()
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/summary/employee/<salespersonid>")
 def salesperson_summary_report_route(salespersonid):
     obj["title"]=f"Employee {salespersonid} Report"
-    SALESPERSON_REPORT_API = f"http://localhost:718/employee/{salespersonid}/order"
+    SALESPERSON_REPORT_API = f"{BASE_URL}/employee/{salespersonid}/order"
     data = requests.get(SALESPERSON_REPORT_API).json()
     return render_template("index.html", obj=obj, data=data )
 
 @app.route("/saledetailed/employee/<salespersonid>/order/<orderid>")
 def detailed_sale_report_route(salespersonid, orderid):
-    print("order: ", orderid)
-    print("salesperson: ", salespersonid)
     obj["title"]=f"Employee {salespersonid} Report"
-    DETAILED_SALE_REPORT_API = f"http://localhost:718/employee/{salespersonid}/order/{orderid}"
+    DETAILED_SALE_REPORT_API = f"{BASE_URL}/employee/{salespersonid}/order/{orderid}"
     data = requests.get(DETAILED_SALE_REPORT_API).json()
     return render_template("index.html", obj=obj, data=data )
 

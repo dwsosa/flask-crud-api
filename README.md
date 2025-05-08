@@ -28,7 +28,7 @@ A simple Flask-based CRUD (Create, Read, Update, Delete) API application using S
 
    This will build the Docker images, create containers for both the Flask app and PostgreSQL database, and start the application.
 
-   - The Flask app will be accessible at `http://127.0.0.1:718` (the port specified in your Docker setup).
+   - The Flask app will be accessible at `http://127.0.0.1:5000` (the port specified in your Docker setup).
    - The PostgreSQL database will be running inside a Docker container.
 
 ### Using a Local Environment (Not Recommended)

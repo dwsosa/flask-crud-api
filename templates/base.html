@@ -28,7 +28,7 @@
             <div class="col welcome">Welcome To My Dealership Dashboard</div>
 
             <figure class="figure">
-                <img src="http://localhost:718/static/images/hummer.jpg" class="figure-img img-fluid rounded mainImage"
+                <img src="/static/images/hummer.jpg" class="figure-img img-fluid rounded mainImage"
                     alt="hummer">
                 <div>
                     <figcaption class="figure-caption text-start"> GM Hummer EV pictured</figcaption>
@@ -82,37 +82,32 @@
     <script src={% block logic %}{% endblock %}></script>
     <script>
 
-        var baseUrl = "http://localhost:718/"
-
         function carButton(event) {
             event.preventDefault();
-            console.log("car");
-            document.location.href= baseUrl + "dashboard/cars"
+            document.location.href= "/dashboard/cars"
         }
         function saleButton() {
             event.preventDefault();
-
-            console.log("sale");
-            document.location.href= baseUrl+ "dashboard/sales"
+            document.location.href= "/dashboard/sales"
         }
         function employeeButton() {
             event.preventDefault();
-            document.location.href= baseUrl+ "dashboard/employees"
+            document.location.href= "/dashboard/employees"
         }
         function customerButton() {
             event.preventDefault();
-            document.location.href= baseUrl + "dashboard/customers";
+            document.location.href= "/dashboard/customers";
         }
         function vehicleSearchButton() {
             event.preventDefault();
             var vinInput = document.getElementsByClassName("vinInput")[0].value;
-            document.location.href= baseUrl + `carinfo/${vinInput}`;
+            document.location.href= `/carinfo/${vinInput}`;
         }
 
         function employeeReportButton() {
             event.preventDefault();
             var employeeId = document.getElementsByClassName("employeeIdInput")[0].value;
-            var url = baseUrl+`summary/employee/${employeeId}`
+            var url =`/summary/employee/${employeeId}`
             document.location.href=url;
         }
 
@@ -120,10 +115,7 @@
             event.preventDefault();
             var employeeId = document.getElementsByClassName("detailedSaleEmployeeId")[0].value;
             var orderId = document.getElementsByClassName("detailedSaleOrderId")[0].value;
-            var url = baseUrl+`saledetailed/employee/${employeeId}/order/${orderId}`;
-            console.log(employeeId);
-            console.log(orderId);
-            console.log(url);
+            var url = `/saledetailed/employee/${employeeId}/order/${orderId}`;
             document.location.href=url;
         }
 
