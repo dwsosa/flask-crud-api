@@ -1,3 +1,15 @@
+# Flask CRUD API
+
+A simple Flask-based CRUD (Create, Read, Update, Delete) API application using SQLAlchemy and PostgreSQL. This project is containerized with Docker for easy setup and deployment.
+
+## Features
+
+- RESTful API built with Flask
+- SQLAlchemy ORM with PostgreSQL
+- Dockerized for portability
+- Configurable environment variables
+- Basic project structure ready for expansion
+
 ## Installation
 
 ### Using Docker Compose
