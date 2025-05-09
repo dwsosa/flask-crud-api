@@ -1,7 +1,8 @@
 # start by pulling the python image
 FROM python:3.10-alpine
 
-ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_HOST=0.0.0.0 
+ENV FLASK_RUN_PORT=5000
 
 # copy the requirements file into the image
 COPY ./requirements.txt /app/requirements.txt

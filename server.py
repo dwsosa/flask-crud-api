@@ -15,6 +15,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres
 # SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+FLASK_RUN_HOST= os.getenv('FLASK_RUN_HOST', '0.0.0.0')
+FLASK_RUN_PORT = os.getenv('FLASK_RUN_PORT', '5000')
 BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:5000")
 
 
@@ -188,4 +190,4 @@ def hello_world(path):
     return "<p>{}<br><br>RESOURCE NOT FOUND <br>ERROR 404 <br>NO MATCHING ROUTES ON SERVER</p>".format(path), 404
 
 if __name__ =='__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host=FLASK_RUN_HOST, port=FLASK_RUN_PORT, debug=True)
